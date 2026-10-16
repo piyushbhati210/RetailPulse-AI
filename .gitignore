@@ -1,0 +1,22 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.db
+data/*.xlsx
+data/*.csv
+
+# Python environment and caches
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+
+# Local retail data and database
+data/*.xlsx
+data/*.xls
+data/*.csv
+data/*.db
+
+# Secrets
+.streamlit/secrets.toml
+.env
