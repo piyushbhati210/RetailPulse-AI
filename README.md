@@ -1,8 +1,9 @@
 # RetailPulse AI — Adaptive Retail Intelligence and Consumer Analytics
 
-An interactive retail analytics dashboard built with Python, Pandas, SQLite, SciPy, Plotly and Streamlit.
-Upload a retail transaction file (CSV/XLS/XLSX), map its columns, and explore sales, SQL, RFM customer
-segments, market baskets and regional order-value tests. Built as a portfolio project.
+🚀 **Live Demo:** [Open RetailPulse AI Dashboard](https://retailpulse-ai21.streamlit.app/)
+
+An interactive retail analytics dashboard built with Python, Pandas, SQLite, SciPy, Plotly and Streamlit. Upload a retail transaction file (CSV/XLS/XLSX), map its columns, and explore sales, SQL, RFM customer segments, market baskets and regional order-value tests.
+
 
 ## Features
 - **Flexible upload**: auto-detects column names (case-insensitive aliases) and lets you map them by hand in a form.
