@@ -1,6 +1,7 @@
 
 """Monthly revenue calculation for the AI review benchmark."""
 
+import numpy as np
 import pandas as pd
 
 
@@ -11,6 +12,9 @@ def monthly_revenue(transactions: pd.DataFrame) -> pd.DataFrame:
     Required columns:
         InvoiceDate: transaction date
         Revenue: transaction revenue
+
+    Returns:
+        DataFrame containing YearMonth and Revenue.
     """
     required = {"InvoiceDate", "Revenue"}
     missing = required.difference(transactions.columns)
@@ -20,11 +24,29 @@ def monthly_revenue(transactions: pd.DataFrame) -> pd.DataFrame:
 
     data = transactions[["InvoiceDate", "Revenue"]].copy()
 
-    data["InvoiceDate"] = pd.to_datetime(
-        data["InvoiceDate"], errors="raise"
-    )
+    # Parse and validate dates.
+    dates = pd.to_datetime(data["InvoiceDate"], errors="raise")
 
-    data["YearMonth"] = data["InvoiceDate"].dt.strftime("%m")
+    if dates.isna().any():
+        raise ValueError("InvoiceDate contains missing values")
+
+    # Convert revenue to numeric values.
+    try:
+        revenue = pd.to_numeric(data["Revenue"], errors="raise")
+    except (TypeError, ValueError) as exc:
+        raise ValueError("Revenue must contain numeric values") from exc
+
+    if revenue.isna().any():
+        raise ValueError("Revenue contains missing values")
+
+    if not np.isfinite(revenue.to_numpy(dtype="float64")).all():
+        raise ValueError("Revenue must contain finite numeric values")
+
+    data["InvoiceDate"] = dates
+    data["Revenue"] = revenue
+
+    # Preserve both year and month.
+    data["YearMonth"] = dates.dt.to_period("M").astype(str)
 
     result = (
         data.groupby("YearMonth", as_index=False)["Revenue"]
