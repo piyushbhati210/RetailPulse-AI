@@ -24,11 +24,24 @@ def monthly_revenue(transactions: pd.DataFrame) -> pd.DataFrame:
 
     data = transactions[["InvoiceDate", "Revenue"]].copy()
 
-    # Parse and validate dates.
-    dates = pd.to_datetime(data["InvoiceDate"], errors="raise")
+    # Parse dates and provide a clear error for invalid values.
+    try:
+        dates = pd.to_datetime(data["InvoiceDate"], errors="raise")
+    except (TypeError, ValueError) as exc:
+        raise ValueError(
+            "InvoiceDate contains invalid date values"
+        ) from exc
 
     if dates.isna().any():
         raise ValueError("InvoiceDate contains missing values")
+
+    # Reject boolean values, including values in mixed-type columns.
+    is_boolean = data["Revenue"].map(
+        lambda value: isinstance(value, (bool, np.bool_))
+    )
+
+    if is_boolean.any():
+        raise ValueError("Revenue must not contain boolean values")
 
     # Convert revenue to numeric values.
     try:
@@ -56,4 +69,3 @@ def monthly_revenue(transactions: pd.DataFrame) -> pd.DataFrame:
     )
 
     return result
-
