@@ -56,3 +56,4 @@ def monthly_revenue(transactions: pd.DataFrame) -> pd.DataFrame:
     )
 
     return result
+
